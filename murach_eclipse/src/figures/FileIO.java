@@ -8,8 +8,10 @@ public class FileIO {
 	public static void main(String[] args) throws IOException {
 		doFigure17_1();
 		doFigure17_3();
+		doFigure17_4();
 	}
 	
+	// How to work with directories and files
 	private static void doFigure17_1() throws IOException {
 		// Create directory if it doesn't already exist
 		String dirStr = "/Users/Brienna/Documents/GitHub repositories/java-practice/murach_eclipse/new directory";
@@ -31,6 +33,7 @@ public class FileIO {
 		System.out.println("Is writable: " + Files.isWritable(filePath));
 	}
 	
+	// A file I/O example
 	private static void doFigure17_3() {
 		// Get a Path object for the file
 		Path testPath = Paths.get("test.txt");
@@ -79,6 +82,30 @@ public class FileIO {
 		// is required to flush or fill the buffer. In contrast, if the data is 
 		// written or read one field at a time, 4000 bytes might require hundreds 
 		// of I/O operations. 
+	}
+	
+	// How to work with I/O exceptions
+	private static void doFigure17_4() {
+		Path fPath = Paths.get("f.txt");
+		if (Files.exists(fPath)) {  // prevents FileNotFoundException
+			File fFile = fPath.toFile();
+			try (BufferedReader in = new BufferedReader(
+									 new FileReader(fFile))) {
+				String line = in.readLine();
+				while (line != null) {  // prevents EOFException
+					System.out.println(line);
+					line = in.readLine();
+				}
+			} catch (IOException e) {  // catches IOException
+				System.out.println(e);
+			}
+		} else {
+			System.out.println(fPath.toAbsolutePath() + " doesn't exist");
+		}
+		
+		// NOTE: IOException - thrown when an error occurs in I/O processing
+		// EOFException - thrown when code attempts to read beyond end of file
+		// FileNotFoundException - thrown when code attempts to open nonexistent file
 	}
 
 }
