@@ -1,2 +1,7 @@
 .DS_Store
-
+RemoteSystemsTempFiles/
+.metadata/
+.recommenders/
+murach_eclipse/.settings/
+.classpath
+.project
