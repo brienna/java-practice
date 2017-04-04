@@ -1,4 +1,4 @@
-package chapter_17.ch17_ex1_CustomerManager.ui;
+package customerManager.ui;
 
 import java.util.Scanner;
 

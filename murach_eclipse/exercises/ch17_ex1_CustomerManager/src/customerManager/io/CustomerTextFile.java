@@ -1,9 +1,9 @@
-package chapter_17.ch17_ex1_CustomerManager.io;
+package customerManager.io;
 
 import java.util.*;
 import java.io.*;
 import java.nio.file.*;
-import chapter_17.ch17_ex1_CustomerManager.business.Customer;
+import customerManager.business.Customer;
 
 public class CustomerTextFile {
     private static final String FIELD_SEP = "\t";

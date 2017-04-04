@@ -1,9 +1,9 @@
-package chapter_17.ch17_ex1_CustomerManager.ui;
+package customerManager.ui;
 
 import java.util.List;
 
-import chapter_17.ch17_ex1_CustomerManager.business.Customer;
-import chapter_17.ch17_ex1_CustomerManager.io.CustomerTextFile;
+import customerManager.business.Customer;
+import customerManager.io.CustomerTextFile;
 
 public class Main {
 
