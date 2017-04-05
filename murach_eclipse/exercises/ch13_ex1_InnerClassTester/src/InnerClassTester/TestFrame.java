@@ -21,19 +21,16 @@ public class TestFrame extends JFrame {
         
         // code that creates the button and adds the listener
         JButton button1 = new JButton("Test Button");
-        ActionListener listener = new ClickListener();
+        ActionListener listener = new ActionListener() {
+        	@Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("The button was clicked!");            
+            }
+        };
         button1.addActionListener(listener);
 
         // code that displays the frame
         panel.add(button1);
         this.setVisible(true);        
-    }
-    
-    // the inner class that implements the listener
-    class ClickListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("The button was clicked!");            
-        }
     }
 }
