@@ -1,7 +1,7 @@
 package InnerClassTester;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,5 +27,13 @@ public class TestFrame extends JFrame {
         // code that displays the frame
         panel.add(button1);
         this.setVisible(true);        
+    }
+    
+    // the inner class that implements the listener
+    class ClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println("The button was clicked!");            
+        }
     }
 }
