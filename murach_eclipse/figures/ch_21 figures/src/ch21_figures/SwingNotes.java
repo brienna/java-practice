@@ -11,6 +11,7 @@ public class SwingNotes {
 		createAndDisplayFrame();
 		workWithButtons();
 		demonstrateBorderLayout();
+		displayDialogBox();
 		//changeLayoutManager();
 		
 		
@@ -71,7 +72,7 @@ public class SwingNotes {
 		});
 	}
 	
-	// Figure 21-6
+	// Figure 21-6, A summary of layout managers
 	// NOTE: A layout manager determines how your components are placed in the container
 	// and how they behave if the container is resized or if the font size changes.
 	// By default, a JFrame widget uses the BorderLayout manager, and a JPanel widget
@@ -82,7 +83,7 @@ public class SwingNotes {
 		frame.setLayout(new FlowLayout(FlowLayout.LEFT));
 	}
 	
-	// Figure 21-8
+	// Figure 21-8, How to work with the BorderLayout manager
 	// NOTE: A BorderLayout has 5 areas: NORTH, SOUTH, EAST, WEST, and CENTER (default).
 	// Each area of a BorderLayout can only hold one component. If you need to add multiple
 	// components to an area, add them to a panel and then add the panel to the area.
@@ -94,5 +95,20 @@ public class SwingNotes {
 		frame.add(new JButton("East"), BorderLayout.EAST);
 		frame.add(new JButton("West"), BorderLayout.WEST);
 		frame.add(new JButton("Center"), BorderLayout.CENTER);
+	}
+	
+	// Figure 21-13, How to display a message
+	// NOTE: The dialog box is modal, meaning it's always on top of the application, and users
+	// can't continue until they have responded to the dialog.
+	public static void displayDialogBox() {
+		// Display an information message
+		// NOTE: showMessageDialog() has 4 parameters: (1) the parent container, (2) the message,
+		// (3) the title, and (4) the type of dialog
+		JOptionPane.showMessageDialog(frame, "The software has been updated.",
+				"Updated", JOptionPane.INFORMATION_MESSAGE);
+		
+		// Display an error message
+		JOptionPane.showMessageDialog(frame, "The internet could not be accessed because it"
+				+ "doesn't exist.", "Resource doesn't exist", JOptionPane.ERROR_MESSAGE);
 	}
 }
