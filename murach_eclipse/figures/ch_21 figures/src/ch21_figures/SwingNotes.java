@@ -1,7 +1,7 @@
 package ch21_figures;
 
+import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
 public class SwingNotes {
@@ -10,6 +10,9 @@ public class SwingNotes {
 	public static void main(String[] args) {
 		createAndDisplayFrame();
 		workWithButtons();
+		demonstrateBorderLayout();
+		//changeLayoutManager();
+		
 		
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
@@ -33,6 +36,8 @@ public class SwingNotes {
 	}
 	
 	// Figure 21-4, How to work with buttons
+	// NOTE: Usually the easiest way to build a GUI application is to use an invisible
+	// container known as a panel to group components.
 	public static void workWithButtons() {
 		JPanel panel = new JPanel();
 		frame.add(panel);
@@ -64,5 +69,30 @@ public class SwingNotes {
 		button2.addActionListener((ActionEvent e) -> {
 			System.out.println("Button 2 clicked!");
 		});
+	}
+	
+	// Figure 21-6
+	// NOTE: A layout manager determines how your components are placed in the container
+	// and how they behave if the container is resized or if the font size changes.
+	// By default, a JFrame widget uses the BorderLayout manager, and a JPanel widget
+	// uses the FlowLayout manager. 
+	public static void changeLayoutManager() {
+		// NOTE: The constructor argument sets the horizontal alignment of the manager.
+		// You can specify LEFT, RIGHT, or CENTER (default). 
+		frame.setLayout(new FlowLayout(FlowLayout.LEFT));
+	}
+	
+	// Figure 21-8
+	// NOTE: A BorderLayout has 5 areas: NORTH, SOUTH, EAST, WEST, and CENTER (default).
+	// Each area of a BorderLayout can only hold one component. If you need to add multiple
+	// components to an area, add them to a panel and then add the panel to the area.
+	// If you don't provide a component for an area in the BorderLayout, that area has a size
+	// of zero and the components in other areas resize to fill any remaining space.
+	public static void demonstrateBorderLayout() {
+		frame.add(new JButton("North"), BorderLayout.NORTH);
+		frame.add(new JButton("South"), BorderLayout.SOUTH);
+		frame.add(new JButton("East"), BorderLayout.EAST);
+		frame.add(new JButton("West"), BorderLayout.WEST);
+		frame.add(new JButton("Center"), BorderLayout.CENTER);
 	}
 }
