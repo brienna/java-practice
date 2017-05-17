@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * Notes on creating the main window of a GUI application.
+ */
+
 public class SwingNotes {
 	public static JFrame frame;  // the main window of the app
 	
@@ -11,13 +15,14 @@ public class SwingNotes {
 		createAndDisplayFrame();
 		workWithButtons();
 		demonstrateBorderLayout();
-		displayDialogBox();
 		//changeLayoutManager();
-		
 		
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
 		frame.setVisible(true);
+		
+		displayDialogBox();
+		confirmOperation();
 	}
 	
 	// Figure 21-3, How to work with frames
@@ -76,7 +81,7 @@ public class SwingNotes {
 	// NOTE: A layout manager determines how your components are placed in the container
 	// and how they behave if the container is resized or if the font size changes.
 	// By default, a JFrame widget uses the BorderLayout manager, and a JPanel widget
-	// uses the FlowLayout manager. 
+	// uses the FlowLayout manager. Those are the two most commonly used layout managers.
 	public static void changeLayoutManager() {
 		// NOTE: The constructor argument sets the horizontal alignment of the manager.
 		// You can specify LEFT, RIGHT, or CENTER (default). 
@@ -109,6 +114,35 @@ public class SwingNotes {
 		
 		// Display an error message
 		JOptionPane.showMessageDialog(frame, "The internet could not be accessed because it"
-				+ "doesn't exist.", "Resource doesn't exist", JOptionPane.ERROR_MESSAGE);
+				+ " doesn't exist.", "Resource doesn't exist", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	// Figure 21-14, How to confirm an operation
+	public static void confirmOperation() {
+		// Display a question dialog with Yes and No buttons
+		int option = JOptionPane.showConfirmDialog(frame, "Do you want to create a new file?",
+				"New file", JOptionPane.YES_NO_OPTION);
+		
+		// Display a question dialog with a warning icon
+		int option2 = JOptionPane.showConfirmDialog(frame, "Are you sure you want to delete"
+				+ " the Internet?\nThis operation cannot be undone.", "Are you sure?", 
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		
+		// NOTE: By default, showConfirmDialog() displays a question icon. 
+		// You can specify another type of icon by supplying the fifth parameter.
+		
+		// NOTE: To determine the option selected by the user, it's common to use a switch
+		// statement, but it's also possible to use an if/else statement.
+		switch (option2) {
+			case JOptionPane.YES_OPTION:
+				System.out.println("You clicked the Yes button.");
+				break;
+			case JOptionPane.NO_OPTION:
+				System.out.println("You clicked the No button.");
+				break;
+			case JOptionPane.CLOSED_OPTION:
+				System.out.println("You closed the dialog.");
+				break;
+		}
 	}
 }
