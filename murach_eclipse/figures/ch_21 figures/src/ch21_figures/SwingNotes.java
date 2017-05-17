@@ -1,5 +1,7 @@
 package ch21_figures;
 
+import java.awt.event.*;
+
 import javax.swing.*;
 
 public class SwingNotes {
@@ -7,7 +9,7 @@ public class SwingNotes {
 	
 	public static void main(String[] args) {
 		createAndDisplayFrame();
-		addButtons();
+		workWithButtons();
 		
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
@@ -31,7 +33,7 @@ public class SwingNotes {
 	}
 	
 	// Figure 21-4, How to work with buttons
-	public static void addButtons() {
+	public static void workWithButtons() {
 		JPanel panel = new JPanel();
 		frame.add(panel);
 		
@@ -50,5 +52,17 @@ public class SwingNotes {
 		panel.add(button2);
 		panel.add(button3);
 		
+		// Handle click events with an anonymous inner class
+		button1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Button 1 clicked!");
+			}
+		});
+		
+		// Handle click events with a lambda expression (in Java 8 or later)
+		button2.addActionListener((ActionEvent e) -> {
+			System.out.println("Button 2 clicked!");
+		});
 	}
 }
