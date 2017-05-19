@@ -14,6 +14,8 @@ public class SwingNotes2 {
 		//createAndAddJLabel();
 		//workWithTextFields();
 		
+		// Automatically size the window so it is just large enough to hold all components
+		frame.pack();
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
 		frame.setVisible(true);
@@ -21,7 +23,6 @@ public class SwingNotes2 {
 	
 	public static void createFrame() {
 		frame = new JFrame("Chapter 22: How to develop a GUI with Swing (part 2)");
-		frame.setSize(600, 400);
 		// Let the OS set the location
 		frame.setLocationByPlatform(true);
 		// Exit application when user selects close button
