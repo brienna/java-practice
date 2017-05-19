@@ -10,6 +10,7 @@ public class SwingNotes2 {
 		createFrame();
 		frame.add(panel);
 		createAndAddJLabel();
+		workWithTextFields();
 		
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
@@ -31,6 +32,7 @@ public class SwingNotes2 {
 		}
 	}
 	
+	// Figure 22-1, How to work with labels
 	public static void createAndAddJLabel() {
 		// How to create a JLabel object and add it to a container
 		JLabel codeLabel = new JLabel("Code:");
@@ -44,4 +46,22 @@ public class SwingNotes2 {
 		// NOTE: A JLabel component defines a label, which is a non-editable widget that 
 		// typically displays text (or an image) that labels other components such as text fields
 	}
+	
+	// Figure 22-2, How to work with text fields
+	public static void workWithTextFields() {
+		// Create a text box for approx. 20 characters
+		JTextField codeField = new JTextField(20);
+		panel.add(codeField);
+		// Get text from the text box
+		String code = codeField.getText();
+		System.out.println(code);
+		// Set text in the text box
+		codeField.setText("sample text");
+		// Create a read-only text box (can copy but can't paste)
+		codeField.setEditable(false);
+		// Disable a text box (can't copy or paste)
+		codeField.setEnabled(false);
+	}
+	
+	
 }
