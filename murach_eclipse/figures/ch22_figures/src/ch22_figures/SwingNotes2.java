@@ -77,6 +77,14 @@ public class SwingNotes2 {
 		// NOTE: You can use the same GridBagConstraints object for multiple widgets,
 		// but you must reset any values you don't want to use in the next widget.
 		GridBagConstraints c = new GridBagConstraints();
+		// Create an Insets object and add it to the GridBagConstraints object
+		// NOTE: An Insets object determines the amount of padding around a component,
+		// the parameters' order starting at the top and going counterclockwise.
+		// If you set 5 pixels of top spacing and 5 pixels of bottom spacing, the spacing 
+		// between components is actually 10 pixels. Same is true with left/right spacing.
+		// Most of the time, you only need to specify external padding. To specify internal 
+		// padding, use ipadx and ipady. 
+		c.insets = new Insets(5, 5, 0, 5); 
 		
 		// Position component on the grid
 		// NOTE: Coordinates represent cells, not pixels
