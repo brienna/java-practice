@@ -1,5 +1,6 @@
 package ch22_figures;
 
+import java.awt.*;
 import javax.swing.*;
 
 public class SwingNotes2 {
@@ -8,9 +9,10 @@ public class SwingNotes2 {
 
 	public static void main(String[] args) {
 		createFrame();
+		useGridBagLayoutManager();
 		frame.add(panel);
-		createAndAddJLabel();
-		workWithTextFields();
+		//createAndAddJLabel();
+		//workWithTextFields();
 		
 		// Make the frame visible
 		// NOTE: Add all of the panels & components to frame before calling setVisible
@@ -63,5 +65,59 @@ public class SwingNotes2 {
 		codeField.setEnabled(false);
 	}
 	
-	
+	// Figure 22-3, An introduction to the GridBagLayout manager
+	public static void useGridBagLayoutManager() {
+		// NOTE: The GridBagLayout is the most powerful and flexible layout manager in Swing.
+		
+		panel.setLayout(new GridBagLayout());
+		
+		// Create a GridBagConstraints object to control the layout of components
+		// inside a container that uses the GridBagLayout manager.
+		// NOTE: You can use the same GridBagConstraints object for multiple widgets,
+		// but you must reset any values you don't want to use in the next widget.
+		GridBagConstraints c = new GridBagConstraints();
+		
+		// Position component on the grid
+		// NOTE: Coordinates represent cells, not pixels
+		c.gridx = 0;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.LINE_END;  // right align
+		// NOTE: The anchor field (LINE_END) controls where the layout manager places the component
+		// within the cell if the cell is larger than the component. Default is center.
+		panel.add(new JLabel("Code:"), c);
+		
+		JTextField codeField = new JTextField(20);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.anchor = GridBagConstraints.LINE_START;
+		panel.add(codeField, c);
+		
+		c.gridx = 0; 
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.LINE_END;
+		panel.add(new JLabel("Description:"), c);
+		
+		JTextField descriptionField = new JTextField(20);
+		c.gridx = 1;
+		c.gridy = 1;
+		c.anchor = GridBagConstraints.LINE_START;
+		panel.add(descriptionField, c);
+		
+		c.gridx = 0;
+		c.gridy = 2; 
+		c.anchor = GridBagConstraints.LINE_END;
+		panel.add(new JLabel("Price:"), c);
+		
+		JTextField priceField = new JTextField(20);
+		c.gridx = 1;
+		c.gridy = 2;
+		c.anchor = GridBagConstraints.LINE_START;
+		panel.add(priceField, c);
+		
+		c.gridx = 0;
+		c.gridy = 3; 
+		c.anchor = GridBagConstraints.LINE_START;
+		c.gridwidth = 2;  // how many cells the component takes up
+		panel.add(new JLabel("This label spans both columns."), c);
+	}
 }
