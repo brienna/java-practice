@@ -8,6 +8,12 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Main started.");
+        
+        CounterThread ctOdd = new CounterThread(ODD);
+        CounterThread ctEven = new CounterThread(EVEN);
+        ctOdd.start();
+        ctEven.start();
+        
         System.out.println("Main finished.");
     }
 

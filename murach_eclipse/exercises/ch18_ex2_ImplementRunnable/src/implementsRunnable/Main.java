@@ -1,4 +1,4 @@
-package murach.counter;
+package implementsRunnable;
 
 public class Main {
 
