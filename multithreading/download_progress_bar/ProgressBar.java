@@ -81,13 +81,12 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
                     // Open output stream for file writing
                     BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("cat.jpg"));
 
-                    int bytesRead = - 1;
                     int totalBytesRead = 0;
                     int percentCompleted = 0;
-
-                    while ((bytesRead = in.read()) != -1) {
-                        out.write(bytesRead);
-                        totalBytesRead += bytesRead;
+                    int i = -1;
+                    while ((i = in.read()) != -1) {
+                        out.write(i);
+                        totalBytesRead++;
                         percentCompleted = totalBytesRead * 100 / connection.getContentLength();
 
                         System.out.println("..." + percentCompleted);
@@ -120,10 +119,11 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
                 }
             } catch (InterruptedException x) {
                 x.printStackTrace();
+                System.out.println("There was an error in downloading the file.");
             } catch (ExecutionException x) {
                 x.printStackTrace();
+                System.out.println("There was an error in downloading the file.");
             }
-            System.out.println("There was an error in downloading the file.");
         }
     }
 
