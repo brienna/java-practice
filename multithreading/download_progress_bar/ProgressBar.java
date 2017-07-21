@@ -6,14 +6,15 @@ import javax.swing.*;
 import java.beans.*;
 import java.net.*;
 import java.io.*;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class ProgressBar implements ActionListener, PropertyChangeListener {
+public class ProgressBar implements ActionListener {
     private JFrame frame;
     private JPanel gui;
     private JButton button;
     private JProgressBar progressBar;
-    private SwingWorker<Void, Void> worker;
+    private SwingWorker<Void, Integer> worker;
     private boolean done;
 
     public ProgressBar() {
@@ -53,11 +54,11 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
         // NOTE: Instances of javax.swing.SwingWorker are not reusable, 
         // so we create new instances as needed
         worker = new Worker();
-        worker.addPropertyChangeListener(this);
+        //worker.addPropertyChangeListener(this);
         worker.execute();
     }
 
-    class Worker extends SwingWorker<Void, Void> {
+    class Worker extends SwingWorker<Void, Integer> {
         /* 
          * Main task. Executed in worker thread.
          */
@@ -88,9 +89,7 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
                         out.write(i);
                         totalBytesRead++;
                         percentCompleted = totalBytesRead * 100 / connection.getContentLength();
-
-                        System.out.println("..." + percentCompleted);
-                        this.setProgress(percentCompleted);
+                        publish(percentCompleted);
                     }
 
                     // Close streams
@@ -125,19 +124,12 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
                 System.out.println("There was an error in downloading the file.");
             }
         }
-    }
 
-    /**
-     * Invoked when task's progress property changes.
-     */
-    public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt);
-        // NOTE: By default two property states exist: "state" and "progress"
-        if (evt.getPropertyName().equals("progress")) {
-            int progress = (Integer) evt.getNewValue();
-            progressBar.setValue(progress);
-            System.out.println(String.format(
-                    "Completed %d%% of task.\n", progress));
+        @Override
+        protected void process(List<Integer> chunks) {
+            int i = chunks.get(chunks.size() - 1);
+            progressBar.setValue(i);  // the last value in this array is all we care about
+            System.out.println("..." + i + "% completed");
         }
     }
 
