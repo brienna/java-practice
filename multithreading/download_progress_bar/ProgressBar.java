@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.beans.*;
+import java.net.*;
+import java.io.*;
 
 public class ProgressBar implements ActionListener, PropertyChangeListener {
     private JFrame frame;
@@ -36,7 +38,7 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
     }
 
     private void createButton()  {
-        button = new JButton("Start progress");
+        button = new JButton("Start download");
         button.addActionListener(this);
     }
 
@@ -44,6 +46,7 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
      * Invoked when user clicks the button.
      */
     public void actionPerformed(ActionEvent evt) {
+        button.setEnabled(false);
         // NOTE: Instances of javax.swing.SwingWorker are not reusable, 
         // so we create new instances as needed
         worker = new Worker();
@@ -56,15 +59,48 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
          * Main task. Executed in worker thread.
          */
         @Override
-        protected Void doInBackground() throws Exception {
-            int progress = 0;
-            this.setProgress(0);
-            while (progress < 100) {
-                // Sleep for up to a tenth of a second, then make progress
-                Thread.sleep(100);
-                progress++;
-                this.setProgress(progress);
+        protected Void doInBackground() throws MalformedURLException {
+            // Create a URL object for a given URL
+            String src = "https://lh3.googleusercontent.com/l6JAkhvfxbP61_FWN92j4ulDMXJNH3HT1DR6xrE7MtwW-2AxpZl_WLnBzTpWhCuYkbHihgBQ=s640-h400-e365";
+            URL url = new URL(src);
+            // Open connection on the URL object
+
+            try {
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            
+                // Always check response code first
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    System.out.println(responseCode);
+
+                    // Open input stream from connection
+                    BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
+                    // Open output stream for file writing
+                    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("cat.jpg"));
+
+                    int bytesRead = - 1;
+                    int totalBytesRead = 0;
+                    int percentCompleted = 0;
+
+                    while ((bytesRead = in.read()) != -1) {
+                        out.write(bytesRead);
+                        totalBytesRead += bytesRead;
+                        percentCompleted = totalBytesRead * 100 / connection.getContentLength();
+
+                        System.out.println("..." + percentCompleted);
+                        this.setProgress(percentCompleted);
+                    }
+
+                    // Close streams
+                    out.close();
+                    in.close();
+                }
+            } catch (IOException ex) {
+                System.out.println(ex);
+                this.setProgress(0);
+                cancel(true);
             }
+            
             return null;
         }
 
@@ -73,7 +109,12 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
          */
         @Override
         protected void done() {
-            System.out.println("Done!");
+            if (!isCancelled()) {
+                System.out.println("File has been downloaded successfully!");
+            } else {
+                System.out.println("There was an error in downloading the file.");
+            }
+            
         }
     }
 
@@ -81,13 +122,15 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
      * Invoked when task's progress property changes.
      */
     public void propertyChange(PropertyChangeEvent evt) {
+        if (!done)
+
         // NOTE: By default two property states exist: "state" and "progress"
-        if ("progress" == evt.getPropertyName()) {
-            int progress = worker.getProgress();
+        if (evt.getPropertyName().equals("progress")) {
+            int progress = (Integer) evt.getNewValue();
             progressBar.setValue(progress);
             System.out.println(String.format(
                     "Completed %d%% of task.\n", progress));
-        } 
+        }
     }
 
     private void addComponentsToFrame() {
