@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.beans.*;
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.ExecutionException;
 
 public class ProgressBar implements ActionListener, PropertyChangeListener {
     private JFrame frame;
@@ -13,8 +14,10 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
     private JButton button;
     private JProgressBar progressBar;
     private SwingWorker<Void, Void> worker;
+    private boolean done;
 
     public ProgressBar() {
+        done = false;
         customizeFrame();
         createMainPanel();
         createProgressBar();
@@ -109,12 +112,18 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
          */
         @Override
         protected void done() {
-            if (!isCancelled()) {
-                System.out.println("File has been downloaded successfully!");
-            } else {
-                System.out.println("There was an error in downloading the file.");
+            button.setEnabled(true);
+            try {
+                if (!isCancelled()) {
+                    get();  // throws an exception if doInBackground throws one
+                    System.out.println("File has been downloaded successfully!");
+                }
+            } catch (InterruptedException x) {
+                x.printStackTrace();
+            } catch (ExecutionException x) {
+                x.printStackTrace();
             }
-            
+            System.out.println("There was an error in downloading the file.");
         }
     }
 
@@ -122,8 +131,7 @@ public class ProgressBar implements ActionListener, PropertyChangeListener {
      * Invoked when task's progress property changes.
      */
     public void propertyChange(PropertyChangeEvent evt) {
-        if (!done)
-
+        System.out.println(evt);
         // NOTE: By default two property states exist: "state" and "progress"
         if (evt.getPropertyName().equals("progress")) {
             int progress = (Integer) evt.getNewValue();
