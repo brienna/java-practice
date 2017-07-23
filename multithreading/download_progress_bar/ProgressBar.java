@@ -15,10 +15,8 @@ public class ProgressBar implements ActionListener {
     private JButton button;
     private JProgressBar progressBar;
     private SwingWorker<Void, Integer> worker;
-    private boolean done;
 
     public ProgressBar() {
-        done = false;
         customizeFrame();
         createMainPanel();
         createProgressBar();
@@ -29,6 +27,14 @@ public class ProgressBar implements ActionListener {
     private void customizeFrame() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Set the look and feel to the cross-platform look and feel,
+        // otherwise mac os will have quirks like gaps between jbuttons
+        try {
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (Exception e) {
+            System.err.println("Unsupported look and feel.");
+            e.printStackTrace();
+        }
     }
 
     private void createMainPanel() {
@@ -51,10 +57,10 @@ public class ProgressBar implements ActionListener {
      */
     public void actionPerformed(ActionEvent evt) {
         button.setEnabled(false);
+        progressBar.setIndeterminate(true);
         // NOTE: Instances of javax.swing.SwingWorker are not reusable, 
         // so we create new instances as needed
         worker = new Worker();
-        //worker.addPropertyChangeListener(this);
         worker.execute();
     }
 
@@ -63,7 +69,7 @@ public class ProgressBar implements ActionListener {
          * Main task. Executed in worker thread.
          */
         @Override
-        protected Void doInBackground() throws MalformedURLException {
+        protected Void doInBackground() throws MalformedURLException {            
             // Create a URL object for a given URL
             String src = "https://lh3.googleusercontent.com/l6JAkhvfxbP61_FWN92j4ulDMXJNH3HT1DR6xrE7MtwW-2AxpZl_WLnBzTpWhCuYkbHihgBQ=s640-h400-e365";
             URL url = new URL(src);
@@ -89,6 +95,8 @@ public class ProgressBar implements ActionListener {
                         out.write(i);
                         totalBytesRead++;
                         percentCompleted = totalBytesRead * 100 / connection.getContentLength();
+
+                        System.out.println(percentCompleted);  // makes download a bit slower, comment out for speed
                         publish(percentCompleted);
                     }
 
@@ -98,7 +106,6 @@ public class ProgressBar implements ActionListener {
                 }
             } catch (IOException ex) {
                 System.out.println(ex);
-                this.setProgress(0);
                 cancel(true);
             }
             
@@ -110,7 +117,6 @@ public class ProgressBar implements ActionListener {
          */
         @Override
         protected void done() {
-            button.setEnabled(true);
             try {
                 if (!isCancelled()) {
                     get();  // throws an exception if doInBackground throws one
@@ -123,13 +129,20 @@ public class ProgressBar implements ActionListener {
                 x.printStackTrace();
                 System.out.println("There was an error in downloading the file.");
             }
+
+            button.setEnabled(true);
         }
 
         @Override
         protected void process(List<Integer> chunks) {
-            int i = chunks.get(chunks.size() - 1);
-            progressBar.setValue(i);  // the last value in this array is all we care about
-            System.out.println("..." + i + "% completed");
+            int percentCompleted = chunks.get(chunks.size() - 1); // only interested in the last value reported each time
+            progressBar.setValue(percentCompleted);  
+
+            if (percentCompleted > 0) {
+                progressBar.setIndeterminate(false);
+                progressBar.setString(null);
+            } 
+            System.out.println("..." + percentCompleted + "% completed");
         }
     }
 
