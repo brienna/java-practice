@@ -1,47 +1,57 @@
 package download_progress_bar;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
-import java.io.IOException;
-import java.io.FileOutputStream;  // meant for writing streams of raw bytes such as image data
-import java.io.BufferedOutputStream;
-import java.io.BufferedInputStream;
+import java.net.*;
+import java.io.*;
+import java.beans.*;
 
-/**
-*
-*   the model
-*
-*/
 public class Downloader {
-    // Send search request
-    public static void download(String source) throws IOException {
-        setProgress(0);
+    private URL url;
+    private int percentCompleted;
+    private PropertyChangeSupport pcs;
 
-        // Create a URL object for a given URL
-        URL website = new URL(source);
-        // Open connection on the URL object
-        HttpURLConnection connection = (HttpURLConnection) website.openConnection();
-        
-        // Check HTTP response code (do this first always)
+    public Downloader() {
+        pcs = new PropertyChangeSupport(this);
+    }
+
+    // Set URL object
+    public void setURL(String src) throws MalformedURLException {
+        url = new URL(src);
+    }
+
+    // Add passed PropertyChangeListener to pcs
+    public void addListener(PropertyChangeListener listener) {
+        pcs.addPropertyChangeListener(listener);
+    }
+
+    public void download() throws IOException {
+        // Open connection on URL object
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        // Check response code (always do this first)
         int responseCode = connection.getResponseCode();
+        System.out.println("response code: " + responseCode);
         if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Open input stream from connection
+            BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
+            // Open output stream for file writing
+            BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("cat.jpg"));
 
-            System.out.println(responseCode);
+            int totalBytesRead = 0;
+            int percentCompleted = 0;
+            int i = -1;
+            while ((i = in.read()) != -1) {
+                out.write(i);
+                totalBytesRead++;
+
+                int x = totalBytesRead * 100 / connection.getContentLength();
+                pcs.firePropertyChange("downloading", this.percentCompleted, this.percentCompleted = x);
+
+                System.out.println(x);  // makes download a bit slower, comment out for speed
+            }
+
+            // Close streams
+            out.close();
+            in.close();
         }
-
-        // Open input stream from connection
-        BufferedInputStream in = new BufferedInputStream(connection.getInputStream());
-        // Open output stream to write file
-        BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream("image.jpg"));
-
-        int i;
-        while ((i = in.read()) != -1) {
-            out.write(i);
-            setProgress((i / connection.getContentLength()));
-        }
-
-        // Close streams
-        out.close();
-        in.close();
     }
 }
