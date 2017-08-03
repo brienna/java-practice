@@ -2,6 +2,7 @@ package multithreaded_chat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class ChatGUI {
     private JFrame frame;
@@ -23,6 +24,7 @@ public class ChatGUI {
     private void createFrame() {
         frame = new JFrame();
         frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void createGUI() {
@@ -30,7 +32,9 @@ public class ChatGUI {
     }
 
     private void createChatArea() {
-        chatArea = new JTextArea(10, 10);
+        chatArea = new JTextArea(20, 20);
+        chatArea.setLineWrap(true); // enable line wrap
+        chatArea.setWrapStyleWord(true); // line wrap at word boundaries
     }
 
     private void createInput() {
@@ -39,6 +43,7 @@ public class ChatGUI {
 
     private void createSendButton() {
         sendButton = new JButton("Send");
+        frame.getRootPane().setDefaultButton(sendButton);  // set to listen to "Enter" key
     }
 
     private void addComponentsToFrame() {
@@ -47,5 +52,20 @@ public class ChatGUI {
         gui.add(sendButton, BorderLayout.SOUTH);
         frame.add(gui);
         frame.pack();
+    }
+
+    // Return text from input field
+    public String getInputText() {
+        return input.getText();
+    }
+
+    // Add text to chat text area
+    public void addTextToChat(String text) {
+        chatArea.append(text);
+    }
+
+    // Attach passed listener to "Send" button
+    void addSendButtonListener(ActionListener actl) {
+        sendButton.addActionListener(actl);
     }
 }
