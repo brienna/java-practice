@@ -35,6 +35,7 @@ public class ChatGUI {
         chatArea = new JTextArea(20, 20);
         chatArea.setLineWrap(true); // enable line wrap
         chatArea.setWrapStyleWord(true); // line wrap at word boundaries
+        chatArea.setEditable(false);  // prevent user from typing directly into chat area
     }
 
     private void createInput() {
@@ -57,6 +58,11 @@ public class ChatGUI {
     // Return text from input field
     public String getInputText() {
         return input.getText();
+    }
+
+    // Clear input
+    public void clearInput() {
+        input.setText("");
     }
 
     // Add text to chat text area
