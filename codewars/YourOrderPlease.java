@@ -6,7 +6,7 @@
  * For an input: "is2 Thi1s T4est 3a" the function should return "Thi1s is2 3a T4est"
  */
 
-class Main {
+class YourOrderPlease {
 
   public static String order(String words) {
     if (words.length() == 0) {
